@@ -13,9 +13,8 @@ const prompt = require('./util/prompt');
 (async () => {
     const students = await obtainStudentIDs()
 
-    //const evaluation = await prompt('Ingresa el número de evaluación a revisar:', 'No has especificado el número de evaluación')
-    //const targetEvaluation = `EVALUACION ${evaluation} MENSUAL`
-    const targetEvaluation = `EVALUACION 1 MENSUAL`
+    const evaluation = await prompt('Ingresa el número de evaluación a revisar:', 'No has especificado el número de evaluación')
+    const targetEvaluation = `EVALUACION ${evaluation} MENSUAL`
 
     console.log('Abriendo navegador...')
 
