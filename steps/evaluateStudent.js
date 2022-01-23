@@ -1,4 +1,4 @@
-const wait = require('../../util/wait')
+const wait = require('../util/wait')
 
 /**
  * @param {import("puppeteer").Page} page
@@ -6,8 +6,8 @@ const wait = require('../../util/wait')
  * @param {number} studentId
  * @param {string} targetEvaluation
  */
-async function evaluate(page, frame, studentId, targetEvaluation) {
-    console.log(`Buscando al estudiante con matricula "${studentId}"...`)
+async function evaluateStudent(page, frame, studentId, targetEvaluation) {
+    //console.log(`Buscando al estudiante con matricula "${studentId}"...`)
 
     // Buscar estudiante dentro de la lista
     const studentRow = await frame.$x(`//td[contains(., "${studentId}")]/following-sibling::td`)
@@ -23,20 +23,20 @@ async function evaluate(page, frame, studentId, targetEvaluation) {
     await evaluationsLink.click()
 
     await frame.waitForNavigation({
-        waitUntil: 'networkidle0'
+        waitUntil: 'networkidle2'
     })
 
-    console.log(`\t✅ Estudiante "${studentId}" encontrado. Seleccionando "${targetEvaluation}"...`)
+    //console.log(`✅ Estudiante "${studentId}" encontrado. Seleccionando "${targetEvaluation}"...`)
 
     // Entrar a la encuesta designada
     const [targetEvaluationRow] = await frame.$x(`//td[contains(., "${targetEvaluation}")]/parent::node()`)
     await targetEvaluationRow.click()
 
     await frame.waitForNavigation({
-        waitUntil: 'networkidle0'
+        waitUntil: 'networkidle2'
     })
 
-    console.log("\t✅ Encuesta seleccionada. Contestando formulario...")
+    //console.log("✅ Encuesta seleccionada. Contestando formulario...")
 
     // Opciones Múltiples (Seleccionar siempre "Mucho")
     const radioInputs = await frame.$$('td input[type="radio"]:first-child')
@@ -69,10 +69,10 @@ async function evaluate(page, frame, studentId, targetEvaluation) {
     await frame.click(saveSelector)
 
     await frame.waitForNavigation({
-        waitUntil: 'networkidle0'
+        waitUntil: 'networkidle2'
     })
 
-    console.log(`\t✅ La encuesta "${targetEvaluation}" ha sido contestada.`)
+    console.log(`✅ ${studentId}`)
 }
 
-module.exports = evaluate
+module.exports = evaluateStudent

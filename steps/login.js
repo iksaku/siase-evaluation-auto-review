@@ -6,7 +6,7 @@ async function login(page) {
 
     // Entrar al portal de servicio social
     await page.goto('https://deimos.dgi.uanl.mx/cgi-bin/bt.sh/ssc_inicio_00.w', {
-        waitUntil: 'networkidle0'
+        waitUntil: 'networkidle2'
     })
 
     const username = process.env.USERNAME
@@ -29,7 +29,7 @@ async function login(page) {
     await page.click('input[type="button"][value="Entrar"]')
 
     await page.waitForNavigation({
-        waitUntil: 'networkidle0'
+        waitUntil: 'networkidle2'
     })
 
     console.log('✅ Sesión Iniciada en el Portal de Servicio Social')

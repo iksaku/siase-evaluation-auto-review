@@ -16,11 +16,11 @@ async function fillSearch(frame) {
     // Buscar
     await frame.click('#id_bt_Filtrar_Fnt')
 
-    console.log('Cargando resultados...')
+    console.log('Cargando lista de Prestadores de Servicio social...')
 
     await frame.waitForNavigation({
         timeout: 0,
-        waitUntil: 'networkidle0'
+        waitUntil: 'networkidle2'
     })
 
     console.log('✅ Se ha obtenido la lista de Prestadores (Estudiantes) de Servicio Social')

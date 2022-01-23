@@ -11,6 +11,8 @@ async function obtainStudentIDs() {
 
     const keyForStudentID = '*Alumno'
 
+    const reviewer = process.env.REVIEWER
+
     const ids = xlsx.utils.sheet_to_json(spreadsheetData)
         .filter((data) => {
             const keyForPersonInCharge = 'Nombre:'
@@ -19,7 +21,7 @@ async function obtainStudentIDs() {
                 return false
             }
 
-            if (data[keyForPersonInCharge] !== process.env.PERSON_IN_CHARGE) {
+            if (data[keyForPersonInCharge] !== reviewer) {
                 return false
             }
 
@@ -27,24 +29,22 @@ async function obtainStudentIDs() {
                 return false
             }
 
-            if (! Number.isInteger(data[keyForStudentID])) {
-                return false
-            }
-
-            return true
+            return Number.isInteger(data[keyForStudentID]);
         })
         .map((data) => data[keyForStudentID])
         .sort()
 
     if (ids.length < 1) {
-        throw new Error(`No se han encontrado alumnos a ser revisados por ${process.env.PERSON_IN_CHARGE}`)
+        throw new Error(`No se han encontrado alumnos a ser revisados por ${reviewer}`)
     }
+
+    console.log('Se revisará a los siguientes alumnos:', ids)
 
     return ids
 }
 
 async function getSpreadsheet() {
-    const rootDir = path.resolve(__dirname, '../../')
+    const rootDir = path.resolve(__dirname, '../')
 
     const files = await fs.readdir(rootDir)
 

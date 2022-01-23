@@ -1,5 +1,6 @@
 /**
  * @param {import("puppeteer").Page} page
+ * @return {import("puppeteer").Frame}
  */
 async function tabNavigation(page) {
     console.log('Entrando al apartado de Prestadores de Servicio Social...')
@@ -13,7 +14,7 @@ async function tabNavigation(page) {
     await tabFrame.click('#id_opcns_30_5_Fnt')
 
     await tabFrame.waitForNavigation({
-        waitUntil: 'networkidle0'
+        waitUntil: 'networkidle2'
     })
 
     console.log('✅ Se ha entrado apartado Prestadores de Servicio Social')
