@@ -39,11 +39,37 @@ const prompt = require('./util/prompt');
 
     console.log('Revisando estudiantes...')
 
+    const studentsLength = students.length
+    let reviewCount = 0
+
+    let studentEvaluationMessage = (studentId, previouslyEvaluated) => {
+        const emoji = previouslyEvaluated ? '⏭' : '✅'
+        let message = `${emoji} ${studentId} (${++reviewCount}/${studentsLength})`
+
+        if (previouslyEvaluated) {
+            message += ' (Previamente revisado)'
+        }
+
+        return message
+    }
+
     for (const studentId of students) {
-        await evaluateStudent(page, frame, studentId, targetEvaluation)
+        let previouslyEvaluated = false
+
+        try {
+            await evaluateStudent(page, frame, studentId, targetEvaluation)
+        } catch (e) {
+            if (e.code !== 'PREVIOUSLY_EVALUATED') throw e
+
+            previouslyEvaluated = true
+        }
+
+        console.log(studentEvaluationMessage(studentId, previouslyEvaluated))
 
         await frame.setContent(cachedStudentListResults)
     }
+
+    console.log("✅ Se ha terminado de revisar a todos los estudiantes bajo su nombre")
 
     await browser.close()
 })()

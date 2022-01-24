@@ -30,6 +30,19 @@ async function evaluateStudent(page, frame, studentId, targetEvaluation) {
 
     // Entrar a la encuesta designada
     const [targetEvaluationRow] = await frame.$x(`//td[contains(., "${targetEvaluation}")]/parent::node()`)
+
+    if (! targetEvaluationRow) {
+        throw Error(`No se ha encontrado la encuesta "${targetEvaluation}"`)
+    }
+
+    const wasEvaluatedPreviously = await targetEvaluationRow.$x('./td[contains(., "Contestado")]')
+
+    if (wasEvaluatedPreviously.length > 0) {
+        throw {
+            code: 'PREVIOUSLY_EVALUATED'
+        }
+    }
+
     await targetEvaluationRow.click()
 
     await frame.waitForNavigation({
@@ -71,8 +84,6 @@ async function evaluateStudent(page, frame, studentId, targetEvaluation) {
     await frame.waitForNavigation({
         waitUntil: 'networkidle2'
     })
-
-    console.log(`✅ ${studentId}`)
 }
 
 module.exports = evaluateStudent
