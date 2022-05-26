@@ -9,19 +9,18 @@ async function obtainStudentIDs() {
     const spreadsheet = xlsx.readFile(await getSpreadsheet())
     const spreadsheetData = spreadsheet.Sheets[spreadsheet.SheetNames[0]]
 
+    const keyForPersonInCharge = 'Nombre:'
     const keyForStudentID = '*Alumno'
 
     const reviewer = process.env.REVIEWER
 
     const ids = xlsx.utils.sheet_to_json(spreadsheetData)
         .filter((data) => {
-            const keyForPersonInCharge = 'Nombre:'
-
             if (! (keyForPersonInCharge in data)) {
                 return false
             }
 
-            if (data[keyForPersonInCharge] !== reviewer) {
+            if (! data[keyForPersonInCharge].includes(reviewer)) {
                 return false
             }
 
